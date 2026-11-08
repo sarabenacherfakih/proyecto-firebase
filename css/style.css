@@ -53,3 +53,19 @@ main {
 .nota p {
     word-wrap: break-word;
 }
+
+#formNota {
+    margin-top: 20px;
+    display: flex;
+    gap: 10px;
+}
+
+#textoNota {
+    flex: 1;
+    padding: 10px;
+}
+
+#formNota button {
+    padding: 10px 15px;
+    cursor: pointer;
+}
