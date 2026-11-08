@@ -1,4 +1,8 @@
 import { db } from "./firebase.js";
+import {
+    collection,
+    addDoc
+} from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
 
 console.log("Firebase conectado");
 
@@ -7,7 +11,7 @@ const formulario = document.getElementById("formNota");
 const textoNota = document.getElementById("textoNota");
 const tablero = document.getElementById("tablero");
 
-formulario.addEventListener("submit", function(evento) 
+formulario.addEventListener("submit", async function(evento)
 {
 
     evento.preventDefault();
@@ -18,7 +22,11 @@ formulario.addEventListener("submit", function(evento)
         return;
     }
 
-    tablero.innerHTML += ` <div class="nota"> <p>${texto}</p></div>`;
+    await addDoc(
+        collection(db, "notas"),
+            {
+                texto: texto
+            });
     
     
 
