@@ -1,3 +1,8 @@
+import { app } from "./firebase.js";
+
+console.log("Firebase conectado");
+
+
 const formulario = document.getElementById("formNota");
 const textoNota = document.getElementById("textoNota");
 const tablero = document.getElementById("tablero");
