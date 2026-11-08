@@ -40,3 +40,16 @@ main {
     position: relative;
     background-color: white;
 }
+
+.nota {
+    width: 200px;
+    min-height: 200px;
+    background-color: #fff59d;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.nota p {
+    word-wrap: break-word;
+}
