@@ -19,9 +19,18 @@ onSnapshot(collection(db, "notas"), (consulta) => {
 
     consulta.forEach((documento) => {
 
+        const datos = documento.data();
+
         tablero.innerHTML += `
-            <div class="nota" data-id="${documento.id}">
-                <p class="textoNota">${documento.data().texto}</p>
+            <div
+                class="nota"
+                data-id="${documento.id}"
+                style="
+                    left:${datos.x || 20}px;
+                    top:${datos.y || 20}px;
+                "
+            >
+                <p class="textoNota">${datos.texto}</p>
 
                 <button class="btnEliminar">
                     X
@@ -31,13 +40,15 @@ onSnapshot(collection(db, "notas"), (consulta) => {
 
     });
 
+    activarArrastre();
+
 });
 
 formulario.addEventListener("submit", async function(evento) {
 
     evento.preventDefault();
 
-    const texto = textoNota.value;
+    const texto = textoNota.value.trim();
 
     if (texto === "") {
         return;
@@ -46,7 +57,9 @@ formulario.addEventListener("submit", async function(evento) {
     await addDoc(
         collection(db, "notas"),
         {
-            texto: texto
+            texto: texto,
+            x: Math.floor(Math.random() * 500),
+            y: Math.floor(Math.random() * 300)
         }
     );
 
@@ -72,7 +85,7 @@ tablero.addEventListener("dblclick", async function(evento) {
         textoActual
     );
 
-    if (nuevoTexto === null || nuevoTexto === "") {
+    if (nuevoTexto === null || nuevoTexto.trim() === "") {
         return;
     }
 
@@ -90,8 +103,15 @@ tablero.addEventListener("click", async function(evento) {
     if (evento.target.classList.contains("btnEliminar")) {
 
         const nota = evento.target.parentElement;
-
         const id = nota.dataset.id;
+
+        const confirmar = confirm(
+            "¿Seguro que quieres borrar esta nota?"
+        );
+
+        if (!confirmar) {
+            return;
+        }
 
         await deleteDoc(
             doc(db, "notas", id)
@@ -100,3 +120,72 @@ tablero.addEventListener("click", async function(evento) {
     }
 
 });
+
+function activarArrastre() {
+
+    const notas = document.querySelectorAll(".nota");
+
+    notas.forEach((nota) => {
+
+        let moviendo = false;
+        let offsetX = 0;
+        let offsetY = 0;
+
+        nota.addEventListener("mousedown", function(e) {
+
+            moviendo = true;
+
+            const rect = nota.getBoundingClientRect();
+
+            offsetX = e.clientX - rect.left;
+            offsetY = e.clientY - rect.top;
+
+        });
+
+        document.addEventListener("mousemove", function(e) {
+
+            if (!moviendo) {
+                return;
+            }
+
+            const rectTablero =
+                tablero.getBoundingClientRect();
+
+            const nuevaX =
+                e.clientX -
+                rectTablero.left -
+                offsetX;
+
+            const nuevaY =
+                e.clientY -
+                rectTablero.top -
+                offsetY;
+
+            nota.style.left = nuevaX + "px";
+            nota.style.top = nuevaY + "px";
+
+        });
+
+        document.addEventListener("mouseup", async function() {
+
+            if (!moviendo) {
+                return;
+            }
+
+            moviendo = false;
+
+            const id = nota.dataset.id;
+
+            await updateDoc(
+                doc(db, "notas", id),
+                {
+                    x: parseInt(nota.style.left),
+                    y: parseInt(nota.style.top)
+                }
+            );
+
+        });
+
+    });
+
+}

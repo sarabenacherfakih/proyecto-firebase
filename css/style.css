@@ -6,14 +6,14 @@
 
 body {
     font-family: Arial, sans-serif;
-    background-color: #f2f2f2;
-    min-height: 100vh;
+    background-color: #f4f4f4;
 }
 
 header {
     background-color: #ffcc00;
     padding: 20px;
     text-align: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
 }
 
 h1 {
@@ -24,74 +24,89 @@ main {
     padding: 20px;
 }
 
-#btnNuevaNota {
-    padding: 10px 20px;
-    border: none;
-    background-color: #ffcc00;
-    cursor: pointer;
-    font-size: 16px;
-    border-radius: 5px;
-}
-
-#tablero {
-    margin-top: 20px;
-    min-height: 70vh;
-    border: 2px dashed #999;
-    position: relative;
-    background-color: white;
-}
-
-.nota {
-    width: 200px;
-    min-height: 200px;
-    background-color: #fff59d;
-    padding: 15px;
-    border-radius: 8px;
-    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
-}
-
-.nota p {
-    word-wrap: break-word;
-}
-
 #formNota {
-    margin-top: 20px;
     display: flex;
     gap: 10px;
+    margin-bottom: 20px;
 }
 
 #textoNota {
     flex: 1;
-    padding: 10px;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
 }
 
 #formNota button {
-    padding: 10px 15px;
+    padding: 12px 20px;
+    border: none;
+    background-color: #ffcc00;
+    border-radius: 8px;
     cursor: pointer;
+    font-weight: bold;
 }
 
-.btnEliminar {
-    margin-top: 10px;
-    padding: 5px;
-    cursor: pointer;
+#formNota button:hover {
+    background-color: #ffb700;
+}
+
+#tablero {
+    position: relative;
+    min-height: 80vh;
+    border: 3px dashed #bdbdbd;
+    border-radius: 10px;
+    background-color: white;
+    overflow: hidden;
 }
 
 .nota {
-    width: 200px;
-    min-height: 200px;
-    background-color: #fff59d;
+    width: 220px;
+    min-height: 220px;
     padding: 15px;
-    border-radius: 8px;
-    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
+
+    position: absolute;
+    cursor: move;
+
+    background-color: #fff59d;
+
+    border-radius: 10px;
+
+    box-shadow: 0 5px 10px rgba(0,0,0,0.25);
 
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+
+    transition: transform 0.2s;
 }
 
-.btnEditar,
+.nota:hover {
+    transform: scale(1.03);
+}
+
+.textoNota {
+    font-size: 18px;
+    word-break: break-word;
+}
+
 .btnEliminar {
-    margin-top: 10px;
-    padding: 5px;
+    align-self: flex-end;
+
+    padding: 8px 12px;
+
+    border: none;
+
+    background-color: #ff4d4d;
+
+    color: white;
+
+    border-radius: 6px;
+
     cursor: pointer;
+
+    font-weight: bold;
+}
+
+.btnEliminar:hover {
+    background-color: #e60000;
 }
