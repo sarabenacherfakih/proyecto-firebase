@@ -23,10 +23,6 @@ onSnapshot(collection(db, "notas"), (consulta) => {
             <div class="nota" data-id="${documento.id}">
                 <p class="textoNota">${documento.data().texto}</p>
 
-                <button class="btnEditar">
-                    Editar
-                </button>
-
                 <button class="btnEliminar">
                     X
                 </button>
@@ -58,31 +54,38 @@ formulario.addEventListener("submit", async function(evento) {
 
 });
 
-tablero.addEventListener("click", async function(evento) {
+tablero.addEventListener("dblclick", async function(evento) {
 
-    if (evento.target.classList.contains("btnEditar")) {
+    const nota = evento.target.closest(".nota");
 
-        const nota = evento.target.parentElement;
-
-        const id = nota.dataset.id;
-
-        const nuevoTexto = prompt(
-            "Nuevo texto:",
-            nota.querySelector(".textoNota").textContent
-        );
-
-        if (nuevoTexto === null || nuevoTexto === "") {
-            return;
-        }
-
-        await updateDoc(
-            doc(db, "notas", id),
-            {
-                texto: nuevoTexto
-            }
-        );
-
+    if (!nota) {
+        return;
     }
+
+    const id = nota.dataset.id;
+
+    const textoActual =
+        nota.querySelector(".textoNota").textContent;
+
+    const nuevoTexto = prompt(
+        "Editar nota:",
+        textoActual
+    );
+
+    if (nuevoTexto === null || nuevoTexto === "") {
+        return;
+    }
+
+    await updateDoc(
+        doc(db, "notas", id),
+        {
+            texto: nuevoTexto
+        }
+    );
+
+});
+
+tablero.addEventListener("click", async function(evento) {
 
     if (evento.target.classList.contains("btnEliminar")) {
 
