@@ -110,3 +110,19 @@ main {
 .btnEliminar:hover {
     background-color: #e60000;
 }
+
+#auth {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+#auth input {
+    padding: 10px;
+}
+
+#auth button {
+    padding: 10px;
+    cursor: pointer;
+}

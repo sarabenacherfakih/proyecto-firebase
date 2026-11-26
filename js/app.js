@@ -1,4 +1,8 @@
-import { db } from "./firebase.js";
+import {
+    db,
+    auth,
+    googleProvider
+} from "./firebase.js";
 
 import {
     collection,
@@ -6,47 +10,161 @@ import {
     deleteDoc,
     updateDoc,
     doc,
-    onSnapshot
+    onSnapshot,
+    query,
+    where
 } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
+
+import {
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+    signInWithPopup,
+    signOut,
+    onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
 
 const formulario = document.getElementById("formNota");
 const textoNota = document.getElementById("textoNota");
 const tablero = document.getElementById("tablero");
 
-onSnapshot(collection(db, "notas"), (consulta) => {
+const email = document.getElementById("email");
+const password = document.getElementById("password");
+
+const btnRegistro = document.getElementById("btnRegistro");
+const btnLogin = document.getElementById("btnLogin");
+const btnGoogle = document.getElementById("btnGoogle");
+const btnLogout = document.getElementById("btnLogout");
+
+let usuarioActual = null;
+
+btnRegistro.addEventListener("click", async () => {
+
+    try {
+
+        await createUserWithEmailAndPassword(
+            auth,
+            email.value,
+            password.value
+        );
+
+        alert("Usuario registrado");
+
+    } catch (error) {
+
+        alert(error.message);
+
+    }
+
+});
+
+btnLogin.addEventListener("click", async () => {
+
+    try {
+
+        await signInWithEmailAndPassword(
+            auth,
+            email.value,
+            password.value
+        );
+
+    } catch (error) {
+
+        alert(error.message);
+
+    }
+
+});
+
+btnGoogle.addEventListener("click", async () => {
+
+    try {
+
+        await signInWithPopup(
+            auth,
+            googleProvider
+        );
+
+    } catch (error) {
+
+        alert(error.message);
+
+    }
+
+});
+
+btnLogout.addEventListener("click", async () => {
+
+    await signOut(auth);
+
+});
+
+onAuthStateChanged(auth, (usuario) => {
+
+    usuarioActual = usuario;
 
     tablero.innerHTML = "";
 
-    consulta.forEach((documento) => {
+    if (usuario) {
 
-        const datos = documento.data();
+        cargarNotas();
 
-        tablero.innerHTML += `
-            <div
-                class="nota"
-                data-id="${documento.id}"
-                style="
-                    left:${datos.x || 20}px;
-                    top:${datos.y || 20}px;
-                "
-            >
-                <p class="textoNota">${datos.texto}</p>
+    }
 
-                <button class="btnEliminar">
-                    X
-                </button>
-            </div>
-        `;
+});
+
+function cargarNotas() {
+
+    const consulta = query(
+        collection(db, "notas"),
+        where("uid", "==", usuarioActual.uid)
+    );
+
+    onSnapshot(consulta, (resultado) => {
+
+        tablero.innerHTML = "";
+
+        resultado.forEach((documento) => {
+
+            const datos = documento.data();
+
+            tablero.innerHTML += `
+                <div
+                    class="nota"
+                    data-id="${documento.id}"
+                    style="
+                        left:${datos.x || 20}px;
+                        top:${datos.y || 20}px;
+                    "
+                >
+                    <p class="textoNota">
+                        ${datos.texto}
+                    </p>
+
+                    <button class="btnEliminar">
+                        X
+                    </button>
+                </div>
+            `;
+
+        });
+
+        activarArrastre();
 
     });
 
-    activarArrastre();
-
-});
+}
 
 formulario.addEventListener("submit", async function(evento) {
 
     evento.preventDefault();
+
+    if (!usuarioActual) {
+
+        alert("Debes iniciar sesión");
+
+        return;
+
+    }
 
     const texto = textoNota.value.trim();
 
@@ -57,6 +175,7 @@ formulario.addEventListener("submit", async function(evento) {
     await addDoc(
         collection(db, "notas"),
         {
+            uid: usuarioActual.uid,
             texto: texto,
             x: Math.floor(Math.random() * 500),
             y: Math.floor(Math.random() * 300)
@@ -85,7 +204,10 @@ tablero.addEventListener("dblclick", async function(evento) {
         textoActual
     );
 
-    if (nuevoTexto === null || nuevoTexto.trim() === "") {
+    if (
+        nuevoTexto === null ||
+        nuevoTexto.trim() === ""
+    ) {
         return;
     }
 
@@ -103,6 +225,7 @@ tablero.addEventListener("click", async function(evento) {
     if (evento.target.classList.contains("btnEliminar")) {
 
         const nota = evento.target.parentElement;
+
         const id = nota.dataset.id;
 
         const confirmar = confirm(
