@@ -126,3 +126,21 @@ main {
     padding: 10px;
     cursor: pointer;
 }
+
+#pantallaLogin {
+    margin-top: 100px;
+    text-align: center;
+}
+
+#auth {
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+    gap: 10px;
+    margin: auto;
+}
+
+#auth input,
+#auth button {
+    padding: 12px;
+}

@@ -35,6 +35,12 @@ const btnLogin = document.getElementById("btnLogin");
 const btnGoogle = document.getElementById("btnGoogle");
 const btnLogout = document.getElementById("btnLogout");
 
+const pantallaLogin =
+    document.getElementById("pantallaLogin");
+
+const pantallaApp =
+    document.getElementById("pantallaApp");
+
 let usuarioActual = null;
 
 btnRegistro.addEventListener("click", async () => {
@@ -106,7 +112,16 @@ onAuthStateChanged(auth, (usuario) => {
 
     if (usuario) {
 
+        pantallaLogin.style.display = "none";
+        pantallaApp.style.display = "block";
+
         cargarNotas();
+
+    }
+    else {
+
+        pantallaLogin.style.display = "block";
+        pantallaApp.style.display = "none";
 
     }
 
@@ -190,9 +205,7 @@ tablero.addEventListener("dblclick", async function(evento) {
 
     const nota = evento.target.closest(".nota");
 
-    if (!nota) {
-        return;
-    }
+    if (!nota) return;
 
     const id = nota.dataset.id;
 
@@ -224,7 +237,8 @@ tablero.addEventListener("click", async function(evento) {
 
     if (evento.target.classList.contains("btnEliminar")) {
 
-        const nota = evento.target.parentElement;
+        const nota =
+            evento.target.parentElement;
 
         const id = nota.dataset.id;
 
@@ -246,7 +260,8 @@ tablero.addEventListener("click", async function(evento) {
 
 function activarArrastre() {
 
-    const notas = document.querySelectorAll(".nota");
+    const notas =
+        document.querySelectorAll(".nota");
 
     notas.forEach((nota) => {
 
@@ -254,60 +269,81 @@ function activarArrastre() {
         let offsetX = 0;
         let offsetY = 0;
 
-        nota.addEventListener("mousedown", function(e) {
+        nota.addEventListener(
+            "mousedown",
+            function(e) {
 
-            moviendo = true;
+                moviendo = true;
 
-            const rect = nota.getBoundingClientRect();
+                const rect =
+                    nota.getBoundingClientRect();
 
-            offsetX = e.clientX - rect.left;
-            offsetY = e.clientY - rect.top;
+                offsetX =
+                    e.clientX - rect.left;
 
-        });
+                offsetY =
+                    e.clientY - rect.top;
 
-        document.addEventListener("mousemove", function(e) {
-
-            if (!moviendo) {
-                return;
             }
+        );
 
-            const rectTablero =
-                tablero.getBoundingClientRect();
+        document.addEventListener(
+            "mousemove",
+            function(e) {
 
-            const nuevaX =
-                e.clientX -
-                rectTablero.left -
-                offsetX;
-
-            const nuevaY =
-                e.clientY -
-                rectTablero.top -
-                offsetY;
-
-            nota.style.left = nuevaX + "px";
-            nota.style.top = nuevaY + "px";
-
-        });
-
-        document.addEventListener("mouseup", async function() {
-
-            if (!moviendo) {
-                return;
-            }
-
-            moviendo = false;
-
-            const id = nota.dataset.id;
-
-            await updateDoc(
-                doc(db, "notas", id),
-                {
-                    x: parseInt(nota.style.left),
-                    y: parseInt(nota.style.top)
+                if (!moviendo) {
+                    return;
                 }
-            );
 
-        });
+                const rectTablero =
+                    tablero.getBoundingClientRect();
+
+                const nuevaX =
+                    e.clientX -
+                    rectTablero.left -
+                    offsetX;
+
+                const nuevaY =
+                    e.clientY -
+                    rectTablero.top -
+                    offsetY;
+
+                nota.style.left =
+                    nuevaX + "px";
+
+                nota.style.top =
+                    nuevaY + "px";
+
+            }
+        );
+
+        document.addEventListener(
+            "mouseup",
+            async function() {
+
+                if (!moviendo) {
+                    return;
+                }
+
+                moviendo = false;
+
+                const id =
+                    nota.dataset.id;
+
+                await updateDoc(
+                    doc(db, "notas", id),
+                    {
+                        x: parseInt(
+                            nota.style.left
+                        ),
+                        y: parseInt(
+                            nota.style.top
+                        )
+                    }
+                );
+
+            }
+        );
 
     });
 
