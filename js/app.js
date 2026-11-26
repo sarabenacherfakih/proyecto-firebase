@@ -3,10 +3,10 @@ import { db } from "./firebase.js";
 import {
     collection,
     addDoc,
-    getDocs,
     deleteDoc,
     updateDoc,
-    doc
+    doc,
+    onSnapshot
 } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
 
 console.log("Firebase conectado");
@@ -15,25 +15,29 @@ const formulario = document.getElementById("formNota");
 const textoNota = document.getElementById("textoNota");
 const tablero = document.getElementById("tablero");
 
-async function cargarNotas() {
+onSnapshot(collection(db, "notas"), (consulta) => {
 
-    const consulta = await getDocs(collection(db, "notas"));
+    tablero.innerHTML = "";
 
     consulta.forEach((documento) => {
 
         tablero.innerHTML += `
             <div class="nota" data-id="${documento.id}">
                 <p class="textoNota">${documento.data().texto}</p>
-                <button class="btnEditar">Editar</button>
-                <button class="btnEliminar">X</button>
+
+                <button class="btnEditar">
+                    Editar
+                </button>
+
+                <button class="btnEliminar">
+                    X
+                </button>
             </div>
         `;
 
     });
 
-}
-
-cargarNotas();
+});
 
 formulario.addEventListener("submit", async function(evento) {
 
@@ -53,8 +57,6 @@ formulario.addEventListener("submit", async function(evento) {
     );
 
     textoNota.value = "";
-
-    location.reload();
 
 });
 
@@ -82,7 +84,6 @@ tablero.addEventListener("click", async function(evento) {
             }
         );
 
-        nota.querySelector(".textoNota").textContent = nuevoTexto;
     }
 
     if (evento.target.classList.contains("btnEliminar")) {
@@ -95,7 +96,6 @@ tablero.addEventListener("click", async function(evento) {
             doc(db, "notas", id)
         );
 
-        nota.remove();
     }
 
 });
