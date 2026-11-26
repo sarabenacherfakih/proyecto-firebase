@@ -69,3 +69,9 @@ main {
     padding: 10px 15px;
     cursor: pointer;
 }
+
+.btnEliminar {
+    margin-top: 10px;
+    padding: 5px;
+    cursor: pointer;
+}

@@ -3,11 +3,12 @@ import { db } from "./firebase.js";
 import {
     collection,
     addDoc,
-    getDocs
+    getDocs,
+    deleteDoc,
+    doc
 } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
 
 console.log("Firebase conectado");
-
 
 const formulario = document.getElementById("formNota");
 const textoNota = document.getElementById("textoNota");
@@ -17,20 +18,22 @@ async function cargarNotas() {
 
     const consulta = await getDocs(collection(db, "notas"));
 
-    consulta.forEach((doc) => {
+    consulta.forEach((documento) => {
 
         tablero.innerHTML += `
-            <div class="nota">
-                <p>${doc.data().texto}</p>
+            <div class="nota" data-id="${documento.id}">
+                <p>${documento.data().texto}</p>
+                <button class="btnEliminar">X</button>
             </div>
         `;
+
     });
+
 }
 
 cargarNotas();
 
-formulario.addEventListener("submit", async function(evento)
-{
+formulario.addEventListener("submit", async function(evento) {
 
     evento.preventDefault();
 
@@ -42,19 +45,29 @@ formulario.addEventListener("submit", async function(evento)
 
     await addDoc(
         collection(db, "notas"),
-            {
-                texto: texto
-            }
+        {
+            texto: texto
+        }
     );
 
-    tablero.innerHTML += `
-        <div class="nota">
-            <p>${texto}</p>
-        </div>
-    `;
-
-    
-    
-
     textoNota.value = "";
+
+    location.reload();
+
+});
+
+tablero.addEventListener("click", async function(evento) {
+
+    if (evento.target.classList.contains("btnEliminar")) {
+
+        const nota = evento.target.parentElement;
+
+        const id = nota.dataset.id;
+
+        await deleteDoc(doc(db, "notas", id));
+
+        nota.remove();
+
+    }
+
 });
