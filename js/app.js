@@ -9,8 +9,6 @@ import {
     onSnapshot
 } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
 
-console.log("Firebase conectado");
-
 const formulario = document.getElementById("formNota");
 const textoNota = document.getElementById("textoNota");
 const tablero = document.getElementById("tablero");
