@@ -9,15 +9,136 @@ body {
     background-color: #f4f4f4;
 }
 
+/* ---------- LOGIN ---------- */
+
+#pantallaLogin {
+    min-height: 100vh;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#pantallaLogin h1 {
+    background-color: #ffcc00;
+
+    width: 100%;
+
+    text-align: center;
+
+    padding: 30px;
+
+    margin-bottom: 50px;
+
+    color: #333;
+
+    box-shadow: 0 2px 5px rgba(0,0,0,.2);
+}
+
+#auth {
+    width: 380px;
+
+    background-color: white;
+
+    padding: 30px;
+
+    border-radius: 12px;
+
+    box-shadow: 0 5px 15px rgba(0,0,0,.15);
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 15px;
+}
+
+#auth input {
+    padding: 12px;
+
+    border: 1px solid #ccc;
+
+    border-radius: 8px;
+}
+
+#auth button {
+    padding: 12px;
+
+    border: none;
+
+    border-radius: 8px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+#btnRegistro {
+    background-color: #ffcc00;
+}
+
+#btnRegistro:hover {
+    background-color: #ffb700;
+}
+
+#btnLogin {
+    background-color: #2196f3;
+    color: white;
+}
+
+#btnLogin:hover {
+    background-color: #1976d2;
+}
+
+#btnGoogle {
+    background-color: #ea4335;
+    color: white;
+}
+
+#btnGoogle:hover {
+    background-color: #d33426;
+}
+
+/* ---------- APP ---------- */
+
 header {
     background-color: #ffcc00;
+
     padding: 20px;
+
     text-align: center;
+
     box-shadow: 0 2px 5px rgba(0,0,0,0.2);
 }
 
-h1 {
+header h1 {
     color: #333;
+}
+
+#btnLogout {
+    margin-top: 15px;
+
+    padding: 10px 20px;
+
+    border: none;
+
+    border-radius: 8px;
+
+    background-color: #ff4d4d;
+
+    color: white;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+#btnLogout:hover {
+    background-color: #e60000;
 }
 
 main {
@@ -32,46 +153,67 @@ main {
 
 #textoNota {
     flex: 1;
+
     padding: 12px;
+
     border: 1px solid #ccc;
+
     border-radius: 8px;
 }
 
 #formNota button {
+
     padding: 12px 20px;
+
     border: none;
-    background-color: #ffcc00;
+
     border-radius: 8px;
-    cursor: pointer;
+
+    background-color: #ffcc00;
+
     font-weight: bold;
+
+    cursor: pointer;
 }
 
 #formNota button:hover {
     background-color: #ffb700;
 }
 
+/* ---------- TABLERO ---------- */
+
 #tablero {
     position: relative;
+
     min-height: 80vh;
-    border: 3px dashed #bdbdbd;
-    border-radius: 10px;
+
     background-color: white;
+
+    border: 3px dashed #bdbdbd;
+
+    border-radius: 10px;
+
     overflow: hidden;
 }
 
+/* ---------- POST-ITS ---------- */
+
 .nota {
     width: 220px;
+
     min-height: 220px;
+
     padding: 15px;
 
     position: absolute;
+
     cursor: move;
 
     background-color: #fff59d;
 
     border-radius: 10px;
 
-    box-shadow: 0 5px 10px rgba(0,0,0,0.25);
+    box-shadow: 0 5px 10px rgba(0,0,0,.25);
 
     display: flex;
     flex-direction: column;
@@ -86,6 +228,7 @@ main {
 
 .textoNota {
     font-size: 18px;
+
     word-break: break-word;
 }
 
@@ -96,51 +239,17 @@ main {
 
     border: none;
 
+    border-radius: 6px;
+
     background-color: #ff4d4d;
 
     color: white;
 
-    border-radius: 6px;
+    font-weight: bold;
 
     cursor: pointer;
-
-    font-weight: bold;
 }
 
 .btnEliminar:hover {
     background-color: #e60000;
-}
-
-#auth {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 20px;
-    flex-wrap: wrap;
-}
-
-#auth input {
-    padding: 10px;
-}
-
-#auth button {
-    padding: 10px;
-    cursor: pointer;
-}
-
-#pantallaLogin {
-    margin-top: 100px;
-    text-align: center;
-}
-
-#auth {
-    display: flex;
-    flex-direction: column;
-    width: 300px;
-    gap: 10px;
-    margin: auto;
-}
-
-#auth input,
-#auth button {
-    padding: 12px;
 }
