@@ -5,6 +5,7 @@ import {
     addDoc,
     getDocs,
     deleteDoc,
+    updateDoc,
     doc
 } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
 
@@ -22,7 +23,8 @@ async function cargarNotas() {
 
         tablero.innerHTML += `
             <div class="nota" data-id="${documento.id}">
-                <p>${documento.data().texto}</p>
+                <p class="textoNota">${documento.data().texto}</p>
+                <button class="btnEditar">Editar</button>
                 <button class="btnEliminar">X</button>
             </div>
         `;
@@ -58,16 +60,42 @@ formulario.addEventListener("submit", async function(evento) {
 
 tablero.addEventListener("click", async function(evento) {
 
+    if (evento.target.classList.contains("btnEditar")) {
+
+        const nota = evento.target.parentElement;
+
+        const id = nota.dataset.id;
+
+        const nuevoTexto = prompt(
+            "Nuevo texto:",
+            nota.querySelector(".textoNota").textContent
+        );
+
+        if (nuevoTexto === null || nuevoTexto === "") {
+            return;
+        }
+
+        await updateDoc(
+            doc(db, "notas", id),
+            {
+                texto: nuevoTexto
+            }
+        );
+
+        nota.querySelector(".textoNota").textContent = nuevoTexto;
+    }
+
     if (evento.target.classList.contains("btnEliminar")) {
 
         const nota = evento.target.parentElement;
 
         const id = nota.dataset.id;
 
-        await deleteDoc(doc(db, "notas", id));
+        await deleteDoc(
+            doc(db, "notas", id)
+        );
 
         nota.remove();
-
     }
 
 });
