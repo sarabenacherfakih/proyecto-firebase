@@ -1,3 +1,5 @@
+import { db } from "./firebase.js";
+
 import {
     collection,
     addDoc,
@@ -42,7 +44,15 @@ formulario.addEventListener("submit", async function(evento)
         collection(db, "notas"),
             {
                 texto: texto
-            });
+            }
+    );
+
+    tablero.innerHTML += `
+        <div class="nota">
+            <p>${texto}</p>
+        </div>
+    `;
+
     
     
 
